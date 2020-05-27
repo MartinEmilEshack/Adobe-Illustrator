@@ -1,0 +1,40 @@
+#ifndef _CIRCLES_H_
+#define _CIRCLES_H_
+
+#ifdef __APPLE__
+#include<GLUT/glut.h>
+#else
+#include<GL/glut.h>
+#endif
+
+#include<stdlib.h>
+#include<stdarg.h>
+#include<math.h>
+
+#include"point.h"
+
+class Circle
+{
+    public:
+        Point center;
+        float radius;
+        int r = 255;
+        int g = 255;
+        int b = 255;
+
+        Circle();
+        Circle(float x, float y, float radius);
+        Circle(Point center, float radius);
+        Circle(const Circle &v);
+
+        ~Circle() {}
+
+        void set_color(int r, int g, int b);
+};
+
+#define draw_circle(cx,cy,radius) draw_circle_(cx,cy,radius,false)
+#define draw_circle_solid(cx,cy,radius) draw_circle_(cx,cy,radius,true)
+
+void draw_circle_(float cx,float cy,float radius,bool isSolid);
+
+#endif

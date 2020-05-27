@@ -1,0 +1,98 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Build",
+			"type": "shell",
+			"group": "build",
+			"windows": {
+				"command": "powershell"
+			},
+			"linux": {
+				"command": "bash"
+			},
+			"osx": {
+				"command": "bash"
+			},
+			"args": [
+				"-c",
+				"make build"
+			],
+			"presentation": {
+				"reveal": "silent",
+				"panel": "dedicated",
+				"focus": false,
+				"showReuseMessage": false,
+				"revealProblems": "onProblem",
+				"echo": false,
+				"clear": true,
+				"group": "Build"
+			},
+			"runOptions": {"instanceLimit": 1},
+			"promptOnClose": true,
+			"detail": "Builds Adobe Ilustrator"
+		},
+		{
+			"label": "Run",
+			"type": "shell",
+			"group": "build",
+			"windows": {
+				"command": "powershell"
+			},
+			"linux": {
+				"command": "bash"
+			},
+			"osx": {
+				"command": "bash"
+			},
+			"args": [
+				"-c",
+				"make run FILE='${relativeFileDirname}/${fileBasenameNoExtension}'"
+			],
+			"presentation": {
+				"reveal": "silent",
+				"panel": "dedicated",
+				"focus": false,
+				"showReuseMessage": false,
+				"revealProblems": "onProblem",
+				"echo": false,
+				"clear": true,
+				"group": "Run"
+			},
+			"runOptions": {"instanceLimit": 1},
+			"promptOnClose": true,
+			"detail": "Runs Adobe Ilustrator"
+		},
+		{
+			"label": "Clean",
+			"type": "shell",
+			"windows": {
+				"command": "powershell"
+			},
+			"linux": {
+				"command": "bash"
+			},
+			"osx": {
+				"command": "bash"
+			},
+			"args": [
+				"-c",																																			
+				"make clean"
+			],
+			"group": "build",
+			"presentation": {
+				"reveal": "silent",
+				"panel": "dedicated",
+				"focus": false,
+				"showReuseMessage": false,
+				"revealProblems": "onProblem",
+				"echo": false,
+				"clear": true,
+				"group": "Clean"
+			},
+			"runOptions": {"instanceLimit": 1},
+			"promptOnClose": true,
+			"detail": "Deletes the binaries of Adobe Ilustrator"
+		}
+	]
+}			
