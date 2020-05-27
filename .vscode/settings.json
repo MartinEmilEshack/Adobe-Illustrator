@@ -1,0 +1,13 @@
+{
+	"editor.tabSize": 3,
+	"editor.insertSpaces": false,
+	"editor.padding.bottom": 90,
+	"files.exclude": {
+		"**/.git": true,
+		"**/.svn": true,
+		"**/.hg": true,
+		"**/CVS": true,
+		"**/.DS_Store": true
+	},
+	"explorerExclude.backup": null
+}
