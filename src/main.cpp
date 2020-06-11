@@ -20,6 +20,7 @@ int logWidth = 500;
 int logHeight = 500;
 
 Point center(logWidth / 2, logHeight / 2);
+int selected_radio_color = 0;
 Color selected_color = Color(0, 0, 0);
 // selected_shape
 
@@ -137,7 +138,7 @@ void mouse_state(int btn_name, int btn_state, int x, int y)
 			 text.check(logical_xy, true) |
 			 undo.check(logical_xy, true) |
 			 fill_btn.check(logical_xy, true) |
-			 no_fill.check(logical_xy, true) |
+			 no_fill.check(logical_xy, true) ;
 
 			 red.check(logical_xy, true) |
 			 green.check(logical_xy, true) |
@@ -229,48 +230,49 @@ void on_create()
 	red.set_hover_color(rgb(153, 217, 234));
 	red.set_activated_color(rgb(181, 230, 29));
 	red.set_behavior(color_bla);
+	red.link_with(&selected_radio_color);
 
 	green.set_main_color(rgb(146, 208, 80));
 	green.set_hover_color(rgb(153, 217, 234));
 	green.set_activated_color(rgb(181, 230, 29));
 	green.set_behavior(color_bla2);
-	green.link_with(&red);
+	green.link_with(&selected_radio_color);
 
 	blue.set_main_color(rgb(0, 176, 240));
 	blue.set_hover_color(rgb(153, 217, 234));
 	blue.set_activated_color(rgb(181, 230, 29));
 	blue.set_behavior(color_bla);
-	blue.link_with(&green);
+	blue.link_with(&selected_radio_color);
 
 	yellow.set_main_color(rgb(255, 255, 0));
 	yellow.set_hover_color(rgb(153, 217, 234));
 	yellow.set_activated_color(rgb(181, 230, 29));
 	yellow.set_behavior(color_bla2);
-	yellow.link_with(&blue);
+	yellow.link_with(&selected_radio_color);
 
 	orange.set_main_color(rgb(228, 108, 10));
 	orange.set_hover_color(rgb(153, 217, 234));
 	orange.set_activated_color(rgb(181, 230, 29));
 	orange.set_behavior(color_bla2);
-	orange.link_with(&yellow);
+	orange.link_with(&selected_radio_color);
 
 	purple.set_main_color(rgb(111, 47, 159));
 	purple.set_hover_color(rgb(153, 217, 234));
 	purple.set_activated_color(rgb(181, 230, 29));
 	purple.set_behavior(color_bla2);
-	purple.link_with(&orange);
+	purple.link_with(&selected_radio_color);
 
 	white.set_main_color(rgb(255, 255, 255));
 	white.set_hover_color(rgb(153, 217, 234));
 	white.set_activated_color(rgb(181, 230, 29));
 	white.set_behavior(color_bla2);
-	white.link_with(&purple);
+	white.link_with(&selected_radio_color);
 
 	black.set_main_color(rgb(0, 0, 0));
 	black.set_hover_color(rgb(153, 217, 234));
 	black.set_activated_color(rgb(181, 230, 29));
 	black.set_behavior(color_bla2);
-	black.link_with(&white);
+	black.link_with(&selected_radio_color);
 }
 
 void on_resume()

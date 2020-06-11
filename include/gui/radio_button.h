@@ -28,7 +28,7 @@ class RadioButton : public Clickable
 		int hight = 10;
 
 		bool in_range = false;
-		int choice = -1;
+		// int choice = -1;
 		int *choice_link;
 		int index;
 
@@ -36,7 +36,7 @@ class RadioButton : public Clickable
 		RadioButton(Point radio_button_center);
 		RadioButton(const RadioButton &rb);
 		RadioButton(RadioButton &&rb) noexcept(false); // = default
-		~RadioButton();
+		~RadioButton(){}
 
 		RadioButton &operator=(const RadioButton &rb);
 		RadioButton &operator=(RadioButton &&rb) noexcept(false); // = default
@@ -45,7 +45,8 @@ class RadioButton : public Clickable
 		void set_hover_color(Color hover);
 		void set_activated_color(Color clicked);
 		void set_behavior(void (*on_click)());
-		bool link_with(RadioButton* radio_button);
+		// bool link_with(RadioButton* radio_button);
+		bool link_with(int* radio_color);
 
 		void draw();
 		bool check(Point mouse_point, bool clicked);
