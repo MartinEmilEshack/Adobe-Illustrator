@@ -27,7 +27,6 @@ PAINTINGS_FLAGS	:= $(CXXFLAGS) -L$(LIB) $(patsubst lib/lib%.a,-l%,$(LIB_A))
 .SILENT:
 
 run: $(TOOLS_OBJ) $(GUI_OBJ) $(LIB_A) $(MAIN_RUNNER)
-	echo $(patsubst lib/lib%.a,-l%,$(LIB_A))
 	bash $(RUN_SCRIPT) $(MAIN_RUNNER)
 
 build: $(TOOLS_OBJ) $(GUI_OBJ) $(LIB_A) $(MAIN_RUNNER)
