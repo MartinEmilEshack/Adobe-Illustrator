@@ -47,7 +47,7 @@
 			},
 			"args": [
 				"-c",
-				"make run FILE='${relativeFileDirname}/${fileBasenameNoExtension}'"
+				"make run"
 			],
 			"presentation": {
 				"reveal": "silent",
