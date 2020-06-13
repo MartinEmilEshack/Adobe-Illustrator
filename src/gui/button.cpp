@@ -3,10 +3,10 @@
 Button::Button(string label, Point button_center)
 {
 	this->label = label;
-	this->top.x = button_center.x-button_width;
-	this->top.y = button_center.y+button_hight;
-	this->bottom.x = button_center.x+button_width;
-	this->bottom.y = button_center.y-button_hight;
+	this->top.x = button_center.x - button_width;
+	this->top.y = button_center.y + button_hight;
+	this->bottom.x = button_center.x + button_width;
+	this->bottom.y = button_center.y - button_hight;
 	this->text.x = top.x;
 	this->text.y = bottom.y;
 }
@@ -42,15 +42,28 @@ void Button::set_clicking_color(Color clicked)
 	this->clicked = clicked;
 }
 
-void Button::set_behavior(void (*on_click)())
-{
-	this->on_click = on_click;
-}
+// void Button::set_behavior(void (*on_click)())
+// {
+// 	this->on_click = on_click;
+// 	(*(this->on_click))();
+// }
 
 void Button::set_text_coordinates(int x, int y)
 {
 	this->text.x += x;
 	this->text.y += y;
+}
+
+void Button::set_behavior(function<void()> on_click)
+{
+	this->on_click = on_click;
+	// this->on_click();
+}
+
+void Button::run()
+{
+	if (on_click)
+		this->on_click();
 }
 
 void Button::draw()
@@ -79,7 +92,7 @@ bool Button::check(Point mouse_point, bool clicked)
 	{
 		in_range = true;
 		is_clicked = clicked;
-		if (clicked) (*(this->on_click))();
+		if(clicked && on_click) on_click();
 	}
 	else
 		in_range = false;

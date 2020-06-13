@@ -18,7 +18,6 @@ using namespace std;
 class RadioButton : public Clickable
 {
 	private:
-		Color main;
 		Color activated;
 		Color hover;
 
@@ -33,6 +32,8 @@ class RadioButton : public Clickable
 		int index;
 
 	public:
+		Color main;
+		
 		RadioButton(Point radio_button_center);
 		RadioButton(const RadioButton &rb);
 		RadioButton(RadioButton &&rb) noexcept(false); // = default
@@ -44,11 +45,13 @@ class RadioButton : public Clickable
 		void set_main_color(Color main);
 		void set_hover_color(Color hover);
 		void set_activated_color(Color clicked);
-		void set_behavior(void (*on_click)());
+		// void set_behavior(void (*on_click)());
+		void set_behavior(function<void()> on_click);
 		// bool link_with(RadioButton* radio_button);
 		bool link_with(int* radio_color);
 
 		void draw();
+		void run();
 		bool check(Point mouse_point, bool clicked);
 };
 

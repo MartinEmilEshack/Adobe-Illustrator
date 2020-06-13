@@ -79,7 +79,7 @@ RadioButton &RadioButton::operator=(const RadioButton &rb)
 		in_range = rb.in_range;
 		// choice = rb.choice;
 		// if ((rb.choice_link) == &(rb.choice))
-			// choice_link = &choice;
+		// choice_link = &choice;
 		// else
 		choice_link = rb.choice_link;
 		index = rb.index;
@@ -136,9 +136,16 @@ void RadioButton::set_activated_color(Color activated)
 	this->activated = activated;
 }
 
-void RadioButton::set_behavior(void (*on_click)())
+// void RadioButton::set_behavior(void (*on_click)())
+// {
+// 	this->on_click = on_click;
+// 	(*(this->on_click))();
+// }
+
+void RadioButton::set_behavior(function<void()> on_click)
 {
 	this->on_click = on_click;
+	// this->on_click();
 }
 
 // bool RadioButton::link_with(RadioButton *radio_button)
@@ -173,6 +180,13 @@ void RadioButton::draw()
 	glRecti(top.x + 2, top.y - 2, bottom.x - 2, bottom.y + 2);
 }
 
+void RadioButton::run()
+{
+	if (on_click)
+		this->on_click();
+	// (*(this->on_click))();
+}
+
 bool RadioButton::check(Point mouse_point, bool clicked)
 {
 	if (mouse_point.x >= top.x && mouse_point.x <= bottom.x &&
@@ -182,9 +196,9 @@ bool RadioButton::check(Point mouse_point, bool clicked)
 		if (clicked)
 		{
 			// if(choice_link == NULL) *choice_link = choice;
-			*choice_link = index;
 			// choice = index;
-			(*(this->on_click))();
+			*choice_link = index;
+			if(on_click) on_click();
 		}
 	}
 	else
