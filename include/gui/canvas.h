@@ -24,7 +24,6 @@ class Canvas : Clickable
 
 		void draw();
 		bool check(Point mouse_point,bool clicked);
-		// void set_behavior(void (*on_click)());
 		void set_behavior(function<void()> on_click);
 		void run();
 };

@@ -36,13 +36,11 @@ class Button: public Clickable
 
 	public:
 		Button(string label, Point button_center);
-		Button(const Button& b);
 		~Button(){}
 
 		void set_main_color(Color main);
 		void set_hover_color(Color hover);
 		void set_clicking_color(Color clicked);
-		// void set_behavior(void (*on_click)());
 		void set_text_coordinates(int x, int y);
 		void set_behavior(function<void()> on_click);
 

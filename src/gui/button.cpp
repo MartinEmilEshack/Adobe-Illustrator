@@ -1,6 +1,9 @@
 #include "button.h"
 
-Button::Button(string label, Point button_center)
+Button::Button(string label, Point button_center) : 
+	main(255, 255, 255),
+	hover(238, 236, 225),
+	clicked(196, 189, 151)
 {
 	this->label = label;
 	this->top.x = button_center.x - button_width;
@@ -9,22 +12,6 @@ Button::Button(string label, Point button_center)
 	this->bottom.y = button_center.y - button_hight;
 	this->text.x = top.x;
 	this->text.y = bottom.y;
-}
-
-Button::Button(const Button &b)
-{
-	this->in_range = b.in_range;
-	this->is_clicked = b.is_clicked;
-
-	this->top = b.top;
-	this->bottom = b.bottom;
-
-	this->main = b.main;
-	this->hover = b.hover;
-	this->clicked = b.clicked;
-
-	this->label = b.label;
-	this->on_click = b.on_click;
 }
 
 void Button::set_main_color(Color main)
@@ -42,12 +29,6 @@ void Button::set_clicking_color(Color clicked)
 	this->clicked = clicked;
 }
 
-// void Button::set_behavior(void (*on_click)())
-// {
-// 	this->on_click = on_click;
-// 	(*(this->on_click))();
-// }
-
 void Button::set_text_coordinates(int x, int y)
 {
 	this->text.x += x;
@@ -57,7 +38,6 @@ void Button::set_text_coordinates(int x, int y)
 void Button::set_behavior(function<void()> on_click)
 {
 	this->on_click = on_click;
-	// this->on_click();
 }
 
 void Button::run()
@@ -92,7 +72,8 @@ bool Button::check(Point mouse_point, bool clicked)
 	{
 		in_range = true;
 		is_clicked = clicked;
-		if(clicked && on_click) on_click();
+		if (clicked && on_click)
+			on_click();
 	}
 	else
 		in_range = false;
