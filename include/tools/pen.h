@@ -21,6 +21,7 @@ class Pen : public Drawable
 		
 	public:
 		Pen();
+		~Pen() {}
 		
 		void draw();
 		void save();
