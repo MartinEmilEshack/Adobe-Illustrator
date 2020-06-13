@@ -4,7 +4,6 @@
 #include <GL/glut.h>
 #endif
 
-#include <iostream>
 #include <vector>
 
 #include "point.h"
@@ -18,26 +17,26 @@
 #include "pen.h"
 #include "text.h"
 
-using namespace std;
-
 int phy_width = 500;
 int phy_hight = 500;
 int logWidth = 500;
 int logHeight = 500;
 
-Point center(logWidth / 2, logHeight / 2);
-Drawable *shape;
-Color selected_color = Color(0, 0, 0);
 int selected_radio_color = 0;
+int selected_drawing_button = 0;
+
+Drawable *shape;
 bool shape_fill;
+Color selected_color = Color(0, 0, 0);
+vector<Drawable *> shapes;
 
 Button line = Button("Line", Point(35, logHeight - 20));
 Button rect = Button("Rect", Point(95, logHeight - 20));
 Button circle = Button("Circle", Point(155, logHeight - 20));
-Button pen = Button("Pen", Point(215, logHeight - 20));
-Button text = Button("Text", Point(35, logHeight - 50));
-Button undo = Button("Undo", Point(95, logHeight - 50));
-Button fill_btn = Button("Fill", Point(155, logHeight - 50));
+Button fill_btn = Button("Fill", Point(215, logHeight - 20));
+Button pen = Button("Pen", Point(35, logHeight - 50));
+Button text = Button("Text", Point(95, logHeight - 50));
+Button undo = Button("Undo", Point(155, logHeight - 50));
 Button no_fill = Button("No Fill", Point(215, logHeight - 50));
 
 RadioButton red = RadioButton(Point(265, logHeight - 35));
@@ -50,8 +49,6 @@ RadioButton white = RadioButton(Point(445, logHeight - 35));
 RadioButton black = RadioButton(Point(475, logHeight - 35));
 
 Canvas canvas = Canvas(Point(10, logHeight - 75), Point(logWidth - 10, 10));
-
-vector<Drawable *> shapes;
 
 // android functions :3
 void on_create();
@@ -69,26 +66,6 @@ Color rgb(int r, int g, int b)
 	return Color(r, g, b);
 }
 
-void bla()
-{
-	cout << "no no don't touch me there!\n";
-}
-
-void bla2()
-{
-	cout << "This is my no no square\n";
-}
-
-void color_bla()
-{
-	cout << "coloring\n";
-}
-
-void color_bla2()
-{
-	cout << "coloring 2\n";
-}
-
 int main(int argc, char *argv[])
 {
 	glutInit(&argc, argv);
@@ -103,6 +80,7 @@ int main(int argc, char *argv[])
 	glutMotionFunc(mouse_clicked_point);
 	glutPassiveMotionFunc(mouse_point);
 	glutMouseFunc(mouse_state);
+	glutKeyboardFunc(KeyboardInput);
 	glutDisplayFunc(on_resume);
 
 	on_create();
@@ -112,11 +90,13 @@ int main(int argc, char *argv[])
 
 void KeyboardInput(unsigned char key, int mouse_x, int mouse_y)
 {
-	Point logical_xy = Point::scale_point(mouse_x, mouse_y, logWidth, logHeight, phy_width, phy_hight);
+	Point logical_xy = Point::scale_point(
+		 mouse_x, mouse_y, logWidth, logHeight, phy_width, phy_hight);
 	Label *label = dynamic_cast<Label *>(shape);
 	if (label && canvas.check(logical_xy, false))
 	{
-		label->write(key);
+		if (label->write(key))
+			shapes.push_back(shape);
 		shape = label->make_new();
 		glutPostRedisplay();
 	}
@@ -124,39 +104,32 @@ void KeyboardInput(unsigned char key, int mouse_x, int mouse_y)
 
 void mouse_point(int x, int y)
 {
-	Point logical_xy = Point::scale_point(x, y, logWidth, logHeight, phy_width, phy_hight);
+	Point logical_xy = Point::scale_point(
+		 x, y, logWidth, logHeight, phy_width, phy_hight);
 	mouse_check(logical_xy, false);
 	glutPostRedisplay();
 }
 
 void mouse_clicked_point(int x, int y)
 {
-	Point logical_xy = Point::scale_point(x, y, logWidth, logHeight, phy_width, phy_hight);
-	// mouse_check(logical_xy, true);
+	Point logical_xy = Point::scale_point(
+		 x, y, logWidth, logHeight, phy_width, phy_hight);
 	if (canvas.check(logical_xy, true))
-	{
-		canvas.set_behavior([logical_xy]() {
-			shape->change(logical_xy, selected_color, shape_fill);
-		});
-		canvas.run();
-	}
+		shape->change(logical_xy, selected_color, shape_fill);
 	glutPostRedisplay();
 }
 
 void mouse_state(int btn_name, int btn_state, int x, int y)
 {
-	Point logical_xy = Point::scale_point(x, y, logWidth, logHeight, phy_width, phy_hight);
+	Point logical_xy = Point::scale_point(
+		 x, y, logWidth, logHeight, phy_width, phy_hight);
 	if (btn_name + btn_state == 0) // left click down
 	{
 		mouse_check(logical_xy, true);
 		if (canvas.check(logical_xy, true))
 		{
-			canvas.set_behavior([logical_xy]() {
-				shape->set_start(logical_xy, selected_color, shape_fill);
-				shape->change(logical_xy, selected_color, shape_fill);
-			});
-			canvas.run();
-			cout << "starting !!\n";
+			shape->set_start(logical_xy, selected_color, shape_fill);
+			shape->change(logical_xy, selected_color, shape_fill);
 		}
 	}
 	else if (btn_name + btn_state == 1) // left click up
@@ -164,13 +137,11 @@ void mouse_state(int btn_name, int btn_state, int x, int y)
 		mouse_check(logical_xy, false);
 		if (canvas.check(logical_xy, false))
 		{
-			canvas.set_behavior([]() {
-				shape->save();
+			if (shape->save())
+			{
 				shapes.push_back(shape);
 				shape = shape->make_new();
-			});
-			canvas.run();
-			cout << shapes.size() << '\n';
+			}
 		}
 	}
 	else if (btn_name + btn_state == 2) // right click down
@@ -203,161 +174,117 @@ void mouse_check(Point logical_xy, bool clicked)
 
 void on_create()
 {
-	rect.set_main_color(rgb(255, 255, 255));
-	rect.set_hover_color(rgb(238, 236, 225));
-	rect.set_clicking_color(rgb(196, 189, 151));
-	rect.set_text_coordinates(15, 6);
-	rect.set_behavior([]() {
-		shape = new Rectangle();
-		cout << "rect ran\n";
-	});
-	rect.run();
-
-	line.set_main_color(rgb(255, 255, 255));
-	line.set_hover_color(rgb(238, 236, 225));
-	line.set_clicking_color(rgb(196, 189, 151));
-	line.set_text_coordinates(15, 6);
-	line.set_behavior([]() {
-		shape = new Line();
-		cout << "line ran\n";
-	});
-
-	circle.set_main_color(rgb(255, 255, 255));
-	circle.set_hover_color(rgb(238, 236, 225));
-	circle.set_clicking_color(rgb(196, 189, 151));
-	// circle.set_behavior(bla);
-	circle.set_text_coordinates(15, 6);
-	circle.set_behavior([]() {
-		shape = new Circle();
-		cout << "circle ran\n";
-	});
-
-	pen.set_main_color(rgb(255, 255, 255));
-	pen.set_hover_color(rgb(238, 236, 225));
-	pen.set_clicking_color(rgb(196, 189, 151));
-	// pen.set_behavior(bla2);
-	pen.set_text_coordinates(15, 6);
-	pen.set_behavior([]() {
-		shape = new Pen();
-		cout << "pen ran\n";
-	});
-
-	text.set_main_color(rgb(255, 255, 255));
-	text.set_hover_color(rgb(238, 236, 225));
-	text.set_clicking_color(rgb(196, 189, 151));
-	// text.set_behavior(bla);
 	text.set_text_coordinates(15, 6);
+	text.stick_with(&selected_drawing_button);
 	text.set_behavior([]() {
-		glutKeyboardFunc(KeyboardInput);
+		delete shape;
 		shape = new Label();
-		cout << "text ran\n";
 	});
 
-	undo.set_main_color(rgb(255, 255, 255));
-	undo.set_hover_color(rgb(238, 236, 225));
-	undo.set_clicking_color(rgb(196, 189, 151));
-	// undo.set_behavior(bla2);
-	undo.set_text_coordinates(15, 6);
-	undo.set_behavior([]() {
+	pen.set_text_coordinates(15, 6);
+	pen.stick_with(&selected_drawing_button);
+	pen.set_behavior([]() {
+		delete shape;
+		shape = new Pen();
+	});
+
+	circle.set_text_coordinates(12, 6);
+	circle.stick_with(&selected_drawing_button);
+	circle.set_behavior([]() {
+		delete shape;
+		shape = new Circle();
+	});
+
+	rect.set_text_coordinates(15, 6);
+	rect.stick_with(&selected_drawing_button);
+	rect.set_behavior([]() {
+		delete shape;
+		shape = new Rectangle();
+	});
+
+	line.set_text_coordinates(15, 6);
+	line.stick_with(&selected_drawing_button);
+	line.set_behavior([]() {
+		delete shape;
 		shape = new Line();
-		cout << "undo ran\n";
 	});
+	line.run();
 
-	fill_btn.set_main_color(rgb(255, 255, 255));
-	fill_btn.set_hover_color(rgb(238, 236, 225));
-	fill_btn.set_clicking_color(rgb(196, 189, 151));
-	// fill_btn.set_behavior(bla);
-	fill_btn.set_text_coordinates(15, 6);
+	fill_btn.set_text_coordinates(19, 6);
 	fill_btn.set_behavior([]() {
 		shape_fill = true;
-		cout << "fill ran\n";
+		fill_btn.set_main_color(rgb(196, 189, 151));
+		fill_btn.set_hover_color(rgb(196, 189, 151));
+		no_fill.set_main_color(rgb(255, 255, 255));
 	});
 
-	no_fill.set_main_color(rgb(255, 255, 255));
-	no_fill.set_hover_color(rgb(238, 236, 225));
-	no_fill.set_clicking_color(rgb(196, 189, 151));
-	// no_fill.set_behavior(bla2);
-	no_fill.set_text_coordinates(15, 6);
+	undo.set_text_coordinates(12, 6);
+	undo.set_behavior([]() {
+		if (!shapes.empty())
+		{
+			Drawable *rubbish = shapes.back();
+			shapes.pop_back();
+			delete rubbish;
+		}
+	});
+
+	no_fill.set_text_coordinates(10, 6);
 	no_fill.set_behavior([]() {
 		shape_fill = false;
-		cout << "No fill ran\n";
+		no_fill.set_main_color(rgb(196, 189, 151));
+		no_fill.set_hover_color(rgb(196, 189, 151));
+		fill_btn.set_main_color(rgb(255, 255, 255));
 	});
 	no_fill.run();
 
 	//colors
 	red.set_main_color(rgb(237, 28, 36));
-	red.set_hover_color(rgb(153, 217, 234));
-	red.set_activated_color(rgb(181, 230, 29));
-	// red.set_behavior(color_bla);
 	red.link_with(&selected_radio_color);
 	red.set_behavior([]() {
 		selected_color = red.main;
 	});
 
 	green.set_main_color(rgb(146, 208, 80));
-	green.set_hover_color(rgb(153, 217, 234));
-	green.set_activated_color(rgb(181, 230, 29));
-	// green.set_behavior(color_bla2);
 	green.link_with(&selected_radio_color);
 	green.set_behavior([]() {
 		selected_color = green.main;
 	});
 
 	blue.set_main_color(rgb(0, 176, 240));
-	blue.set_hover_color(rgb(153, 217, 234));
-	blue.set_activated_color(rgb(181, 230, 29));
-	// blue.set_behavior(color_bla);
 	blue.link_with(&selected_radio_color);
 	blue.set_behavior([]() {
 		selected_color = blue.main;
 	});
 
 	yellow.set_main_color(rgb(255, 255, 0));
-	yellow.set_hover_color(rgb(153, 217, 234));
-	yellow.set_activated_color(rgb(181, 230, 29));
-	// yellow.set_behavior(color_bla2);
 	yellow.link_with(&selected_radio_color);
 	yellow.set_behavior([]() {
 		selected_color = yellow.main;
 	});
 
 	orange.set_main_color(rgb(228, 108, 10));
-	orange.set_hover_color(rgb(153, 217, 234));
-	orange.set_activated_color(rgb(181, 230, 29));
-	// orange.set_behavior(color_bla2);
 	orange.link_with(&selected_radio_color);
 	orange.set_behavior([]() {
 		selected_color = orange.main;
 	});
 
 	purple.set_main_color(rgb(111, 47, 159));
-	purple.set_hover_color(rgb(153, 217, 234));
-	purple.set_activated_color(rgb(181, 230, 29));
-	// purple.set_behavior(color_bla2);
 	purple.link_with(&selected_radio_color);
 	purple.set_behavior([]() {
 		selected_color = purple.main;
 	});
 
 	white.set_main_color(rgb(255, 255, 255));
-	white.set_hover_color(rgb(153, 217, 234));
-	white.set_activated_color(rgb(181, 230, 29));
-	// white.set_behavior(color_bla2);
 	white.link_with(&selected_radio_color);
 	white.set_behavior([]() {
 		selected_color = white.main;
 	});
 
 	black.set_main_color(rgb(0, 0, 0));
-	black.set_hover_color(rgb(153, 217, 234));
-	black.set_activated_color(rgb(181, 230, 29));
-	// black.set_behavior(color_bla2);
 	black.link_with(&selected_radio_color);
 	black.set_behavior([]() {
 		selected_color = black.main;
 	});
-
-	// canvas.set_behavior(bla2);
 }
 
 void on_resume()
