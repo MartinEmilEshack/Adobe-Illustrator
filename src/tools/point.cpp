@@ -14,13 +14,6 @@ Point::Point(float x, float y)
 	this->invalid = false;
 }
 
-Point::Point(const Point &v)
-{
-	x = v.x;
-	y = v.y;
-	invalid = v.invalid;
-}
-
 Point Point::getFinal()
 {
 	Point fin(0.0, 0.0);

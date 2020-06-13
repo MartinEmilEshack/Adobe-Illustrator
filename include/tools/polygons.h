@@ -9,9 +9,6 @@
 
 #include <stdarg.h>
 #include <math.h>
-// #include<iostream>
-
-// using namespace std;
 
 #include "point.h"
 #include "color.h"
@@ -24,6 +21,7 @@ class Rectangle : public Drawable
 
 	public:
 		Rectangle();
+		~Rectangle() {}
 
 		void draw();
 		void save();

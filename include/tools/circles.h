@@ -23,8 +23,6 @@ class Circle : public Drawable
 		Circle();
 		Circle(float x, float y, float radius);
 		Circle(Point center, float radius);
-		Circle(const Circle &v);
-
 		~Circle() {}
 
 		void set_color(Color color);

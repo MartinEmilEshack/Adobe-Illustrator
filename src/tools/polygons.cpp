@@ -62,7 +62,6 @@ void draw_polygon_(bool isSolid, Point vertex, ...)
 			while (!vertex.invalid)
 			{
 				glVertex2f(vertex.x, vertex.y);
-				// cout << "X=" << vertex.x << " Y=" << vertex.y <<"\n";
 				vertex = *va_arg(ap, Point *);
 			}
 		}
@@ -82,7 +81,6 @@ void draw_equilateral_(float x, float y, float size, int sideNum, int degree, bo
 			float xl = size * (cosf(theta));
 			float yl = size * (sinf(theta));
 			glVertex2f(x + xl, y + yl);
-			// glColor3f(0.0,1.0,1.0);
 		}
 	}
 	glEnd();

@@ -22,8 +22,7 @@ class Drawable
 		bool started;
 
 		Drawable() {}
-		// Drawable(Point start, Point end) {}
-		~Drawable() {}
+		virtual ~Drawable() {};
 	
 		virtual void draw() = 0;
 		virtual void save() = 0;

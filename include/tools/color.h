@@ -14,7 +14,6 @@ class Color
 
 		Color(){}
 		Color(int r, int g, int b);
-		Color(const Color& c);
 		~Color(){}
 
 		void color(); // the verb ( ͡° ͜ʖ ͡°)

@@ -19,13 +19,6 @@ Circle::Circle(Point center, float radius)
 	this->radius = radius;
 }
 
-Circle::Circle(const Circle &v)
-{
-	this->start_point = v.start_point;
-	this->radius = v.radius;
-	this->shape_color = v.shape_color;
-}
-
 void Circle::set_color(int r, int g, int b)
 {
 	set_color(Color(r, g, b));

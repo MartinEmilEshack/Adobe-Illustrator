@@ -15,9 +15,7 @@ class Point
 		float y;
 	
 		Point();
-		Point(float x, float y);
-		Point(const Point &v);
-	
+		Point(float x, float y);	
 		~Point() {}
 	
 		static Point getFinal();

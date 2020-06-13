@@ -17,6 +17,7 @@ class Line : public Drawable
 
 	public:
 		Line();
+		~Line() {}
 
 		void draw();
 		void save();
