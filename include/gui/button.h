@@ -34,6 +34,9 @@ class Button: public Clickable
 		int button_width = 25;
 		int button_hight = 10;
 
+		int *choice_link;
+		int index;
+
 	public:
 		Button(string label, Point button_center);
 		~Button(){}
@@ -43,6 +46,7 @@ class Button: public Clickable
 		void set_clicking_color(Color clicked);
 		void set_text_coordinates(int x, int y);
 		void set_behavior(function<void()> on_click);
+		bool stick_with(int* sticky);
 
 		void run();
 		void draw();

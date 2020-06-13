@@ -12,6 +12,7 @@ Button::Button(string label, Point button_center) :
 	this->bottom.y = button_center.y - button_hight;
 	this->text.x = top.x;
 	this->text.y = bottom.y;
+	this->index = 0;
 }
 
 void Button::set_main_color(Color main)
@@ -40,6 +41,14 @@ void Button::set_behavior(function<void()> on_click)
 	this->on_click = on_click;
 }
 
+bool Button::stick_with(int *sticky)
+{
+	choice_link = sticky;
+	index = *choice_link + 1;
+	*choice_link = index;
+	return true;
+}
+
 void Button::run()
 {
 	if (on_click)
@@ -50,11 +59,11 @@ void Button::draw()
 {
 	glColor3ub(0, 0, 0);
 	glRecti(top.x, top.y, bottom.x, bottom.y);
-
-	if (is_clicked && clicked.r > -1)
+	
+	if (is_clicked)
 		clicked.color();
-	else if (is_clicked)
-		main.color();
+	else if (choice_link && *choice_link == index)
+		clicked.color();
 	else if (in_range)
 		hover.color();
 	else
@@ -72,8 +81,8 @@ bool Button::check(Point mouse_point, bool clicked)
 	{
 		in_range = true;
 		is_clicked = clicked;
-		if (clicked && on_click)
-			on_click();
+		if (choice_link && clicked) *choice_link = index;
+		if (on_click && clicked) on_click();
 	}
 	else
 		in_range = false;
