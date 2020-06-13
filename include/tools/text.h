@@ -11,8 +11,28 @@
 #include<string.h>
 
 #include"point.h"
+#include "drawable.h"
 
 using namespace std;
+
+class Label : public Drawable
+{
+	private:
+		int text_size;
+		string text;
+		Point end_point = Point();
+
+	public:
+		Label();
+
+		void draw();
+		void save() {}
+		void set_start(Point start, Color color, bool fill);
+		void change(Point end, Color color, bool fill);
+		Drawable* make_new();
+
+		void write(unsigned char letter);
+};
 
 void print_xy(float x,float y,const char* text,void* font);
 
