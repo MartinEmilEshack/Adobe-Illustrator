@@ -40,9 +40,9 @@ Point Point::scale_point(
 
 void draw_point(float x, float y)
 {
+	glPointSize(1.0);
 	glBegin(GL_POINTS);
 	{
-		glPointSize(1.0);
 		glVertex2f(x, y);
 	}
 	glEnd();
