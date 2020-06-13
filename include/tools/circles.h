@@ -29,7 +29,7 @@ class Circle : public Drawable
 		inline void set_color(int r, int g, int b);
 
 		void draw();
-		void save();
+		bool save();
 		void set_start(Point start, Color color, bool fill);
 		void change(Point end, Color color, bool fill);
 		Drawable *make_new();

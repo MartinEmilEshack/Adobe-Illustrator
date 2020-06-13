@@ -17,9 +17,10 @@ void Line::draw()
 	glEnd();
 }
 
-void Line::save()
+bool Line::save()
 {
 	saved = true;
+	return true;
 }
 
 void Line::set_start(Point start, Color color, bool fill)

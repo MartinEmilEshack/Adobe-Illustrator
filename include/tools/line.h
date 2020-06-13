@@ -20,7 +20,7 @@ class Line : public Drawable
 		~Line() {}
 
 		void draw();
-		void save();
+		bool save();
 		void set_start(Point start, Color color, bool fill);
 		void change(Point end, Color color, bool fill);
 		Drawable* make_new();

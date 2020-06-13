@@ -7,8 +7,8 @@
 #include<GL/glut.h>
 #endif
 
-#include<iostream>
-#include<string.h>
+#include<string>
+#include<cstring>
 
 #include"point.h"
 #include "drawable.h"
@@ -24,14 +24,15 @@ class Label : public Drawable
 
 	public:
 		Label();
+		~Label() {}
 
 		void draw();
-		void save() {}
+		bool save();
 		void set_start(Point start, Color color, bool fill);
 		void change(Point end, Color color, bool fill);
 		Drawable* make_new();
 
-		void write(unsigned char letter);
+		bool write(unsigned char letter);
 };
 
 void print_xy(float x,float y,const char* text,void* font);

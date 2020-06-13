@@ -45,9 +45,10 @@ void Circle::draw()
 	glEnd();
 }
 
-void Circle::save()
+bool Circle::save()
 {
 	saved = true;
+	return true;
 }
 
 void Circle::set_start(Point start, Color color, bool fill)

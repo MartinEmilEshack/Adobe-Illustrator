@@ -41,9 +41,10 @@ void Pen::Pen::draw()
 	}
 }
 
-void Pen::Pen::save()
+bool Pen::Pen::save()
 {
 	saved = true;
+	return true;
 }
 
 void Pen::Pen::set_start(Point start, Color color, bool fill)

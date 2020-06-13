@@ -24,9 +24,10 @@ void Rectangle::draw()
 	}
 }
 
-void Rectangle::save()
+bool Rectangle::save()
 {
 	saved = true;
+	return true;
 }
 
 void Rectangle::set_start(Point start, Color color, bool fill)

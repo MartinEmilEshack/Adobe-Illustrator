@@ -33,13 +33,16 @@ void Label::draw()
 	}
 }
 
+bool Label::save()
+{
+	return false;
+}
+
 void Label::set_start(Point start, Color color, bool fill)
 {
-	cout << start_point.y << '\n';
-	if(start_point.y + 15 >= 200)
-	{
+	// hard codded canvas dimensions sorry!
+	if (start.y + 90 > 500 || start.x + 20 > 500)
 		return;
-	}
 	started = true;
 	shape_color = color;
 	start_point = start;
@@ -63,7 +66,7 @@ Drawable *Label::make_new()
 		return new Label();
 }
 
-void Label::write(unsigned char letter)
+bool Label::write(unsigned char letter)
 {
 	int letter_num = int(letter);
 	if (letter_num == 13)
@@ -85,6 +88,7 @@ void Label::write(unsigned char letter)
 			text_size++;
 		}
 	}
+	return saved;
 }
 
 void print_xy(float x, float y, const char *text, void *font)
